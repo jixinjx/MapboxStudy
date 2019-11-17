@@ -64,19 +64,15 @@ export default {
 
       const _this = this;
       this.map.on('load',function(){
-        _this.map.addSource('heatsrc',{
-          "type": "geojson",
-         "data": geojson,
-         
-        });
+       
         var featuresdata=_this.data.features;
       //for循环给对象写入color属性，通过cnt赋予不同的color属性，由于cnt属性值太小，所以乘以一个系数
         for(var i=0;i<featuresdata.length;i++){
           if(Number(featuresdata[i].properties.cnt)<2)
-          {_this.$set(featuresdata[i].properties,'color','#0000FF');}
+          {_this.$set(featuresdata[i].properties,'color','#00FFFF');}
           else if(Number(featuresdata[i].properties.cnt)<10)
-          {_this.$set(featuresdata[i].properties,'color','#FFFF00');}
-          else {_this.$set(featuresdata[i].properties,'color','#FF0000');}
+          {_this.$set(featuresdata[i].properties,'color','#0000FF');}
+          else {_this.$set(featuresdata[i].properties,'color','#FFFF00');}
         // switch(featuresdata[i].properties.cnt){
         //   case Number(featuresdata[i].properties.cnt)<2:
         //     _this.$set(featuresdata[i].properties,'color','#0000FF');
@@ -89,7 +85,11 @@ export default {
         // };
             featuresdata[i].properties.cnt=featuresdata[i].properties.cnt*60;
         }
+          _this.map.addSource('heatsrc',{
+          "type": "geojson",
+         "data": geojson,
          
+        });
        console.log(_this.data.features,"2222");
 
 
@@ -97,12 +97,7 @@ export default {
         _this.map.addLayer({
 'id': 'room-extrusion',
 'type': 'fill-extrusion',
-'source': {
-// GeoJSON Data source used in vector tiles, documented at
-// https://gist.github.com/ryanbaumann/a7d970386ce59d11c16278b90dde094d
-'type': 'geojson',
- "data": _this.data,
-},
+'source': 'heatsrc',
 'paint': {
 // See the Mapbox Style Specification for details on data expressions.
 // https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions
@@ -122,7 +117,51 @@ export default {
 }, 'waterway-label');
 
 
+  _this.map.addLayer({
+        'id': 'entity_borders',
+        'type': 'fill',
+      'source': 'heatsrc',
+        'type': 'fill-extrusion',
+        'layout': {},
+       'minZoom': 10,
+        'paint': {
+          'fill-extrusion-color': '#FF0000',
+          // use an 'interpolate' expression to add a smooth transition effect to the
+          // buildings as the user zooms in
+  'fill-extrusion-height': ['get', 'cnt'],
+        
+          'fill-extrusion-opacity': 1
+        },
+        "filter": ["in", "hexcode", ""]
+      });
 
+ _this.map.on("mousemove", "room-extrusion", function(e) {
+        _this.map.getCanvas().style.cursor = 'pointer';
+         let feature = e.features[0];
+console.log(feature,'4444')
+        let relatedFeatures = _this.map.querySourceFeatures('heatsrc', {
+          filter: ['in', 'hexcode', feature.properties.hexcode]
+        });
+console.log(relatedFeatures,'555')
+        // let filter = relatedFeatures.reduce(function(memo, feature) {
+        //   memo.push(feature.properties.hexcode);
+        //   return memo;
+        // }, ['in', 'hexcode']);
+        // console.log(filter,'66')
+
+        _this.map.setFilter("entity_borders",['in', 'hexcode', feature.properties.hexcode]);
+
+        
+        })
+      
+   _this.map.on("mouseleave", "room-extrusion", function() {
+        _this.map.getCanvas().style.cursor = '';
+        _this.map.setFilter('entity_borders', ['in', 'hexcode', '']);
+
+      });
+
+      
+      
       }
       )
       // this.map.on("load", e => {
