@@ -16,5 +16,14 @@ export default new Router({
       name: 'map1',
      component: resolve => require(['@/views/business/map1/index'], resolve),
   },
+  {
+    path: '/ceshi3',
+    name: 'ceshi3',
+    component: resolve => require(['@/views/business/ceshi3/index'], resolve),
+},{
+  path: '/mapmain',
+  name: 'mapmain',
+  component: resolve => require(['@/views/business/mapmain/index'], resolve),
+},
   ]
 })
