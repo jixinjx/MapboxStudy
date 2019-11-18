@@ -17,10 +17,11 @@ export default new Router({
      component: resolve => require(['@/views/business/map1/index'], resolve),
   },
   {
-    path: '/ceshi3',
-    name: 'ceshi3',
-    component: resolve => require(['@/views/business/ceshi3/index'], resolve),
-},{
+    path: '/ceshi1',
+    name: 'ceshi1',
+    component: resolve => require(['@/views/business/ceshi1/index'], resolve),
+},
+  {
   path: '/mapmain',
   name: 'mapmain',
   component: resolve => require(['@/views/business/mapmain/index'], resolve),

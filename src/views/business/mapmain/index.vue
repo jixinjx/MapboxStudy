@@ -34,14 +34,14 @@ export default {
       isShowLayerControls: true,
       layers: [
         {
-          name: "XRegion_Town",
-          label: "戴楼街道",
+          name: "clusters",
+          label: "聚类分析",
           visable: true,
-          checked: true
+          checked: false
         },
-        {
-          name: "XRegion_Village",
-          label: "行政区划",
+      {
+          name: "Honeycomb",
+          label: "蜂窝分析",
           visable: true,
           checked: false
         },
@@ -81,19 +81,12 @@ export default {
       this.map.on("load", e => {
         _this.isShowLayerControls = true;
         //加载sources
-        _this.map.loadImage("./static/images/dsj/marker/政府.png", function(
-          error,
-          image
-        ) {
-          console.log(error);
-          if (error) throw error;
-          _this.map.addImage("icon-zf", image);
-        });
+      
         _this.addSource();
-
+ _this.initEvent()
         //初始化加载
         setTimeout(function() {
-          _this.$refs.layers.addLayer("XRegion_Town", _this.layers[0]);
+          _this.$refs.layers.addLayer("Honeycomb", _this.layers[0]);
         }, 1000);
       });
     },
@@ -109,88 +102,75 @@ export default {
     initEvent() {
       const _this = this;
       let hoveredStateId = null;
-      this.map.on("mousemove", "XZQH", function(e) {
-        if (e.features.length > 0) {
-          if (hoveredStateId) {
-            _this.map.setFeatureState(
-              {
-                source: "SuZhou_SIPSD_Region_CGS84",
-                id: hoveredStateId,
-                sourceLayer: "SuZhou_SIPSD_Region_CGS84"
-              },
-              { hover: false }
-            );
-          }
-          hoveredStateId = e.features[0].id;
-          _this.map.setFeatureState(
-            {
-              source: "SuZhou_SIPSD_Region_CGS84",
-              id: hoveredStateId,
-              sourceLayer: "SuZhou_SIPSD_Region_CGS84"
-            },
-            { hover: true }
-          );
-        }
+//鼠标移到图层上指针发生变化
+      _this.map.on("mousemove", "Honeycomb", function(e) {
+        _this.map.getCanvas().style.cursor = 'pointer';})
+//点击蜂窝图蜂窝图变为红色
+ _this.map.on("click", "Honeycomb", function(e) {
+         let feature = e.features[0];
+        let relatedFeatures = _this.map.querySourceFeatures('HoneycombShow', {
+          filter: ['in', 'hexcode', feature.properties.hexcode]
+        });
+
+        // let filter = relatedFeatures.reduce(function(memo, feature) {
+        //   memo.push(feature.properties.hexcode);
+        //   return memo;
+        // }, ['in', 'hexcode']);
+        // console.log(filter,'66')
+//选择器
+        _this.map.setFilter("Honeycomb_hightlight",['in', 'hexcode', feature.properties.hexcode]);
+
+        
+        })
+      //鼠标移开指针变回
+   _this.map.on("mouseleave", "Honeycomb", function() {
+        _this.map.getCanvas().style.cursor = '';
+
       });
-      this.map.on("mouseleave", "XZQH", function() {
-        if (hoveredStateId) {
-          _this.map.setFeatureState(
-            {
-              source: "SuZhou_SIPSD_Region_CGS84",
-              id: hoveredStateId,
-              sourceLayer: "SuZhou_SIPSD_Region_CGS84"
-            },
-            { hover: false }
-          );
-        }
-        hoveredStateId = null;
-      });
+
+
     },
+
+    
     initMarker(info) {},
     addLayerByKey(key) {
       this.map.addLayer(layerConfig[key]);
       this.activeLayerList.push(key);
     },
     addLayer(key) {
+      //清除之前的底图
       this.activeLayerList.forEach(e => {
         if (this.map.getLayer(e)) this.map.removeLayer(e);
       });
       this.activeLayerList = [];
       if (this.popupTip) this.popupTip.remove();
       switch (key) {
-        case "XRegion_Town":
-          this.addLayerByKey(key);
-          this.addLayerByKey("XRegion_Town_line");
-          this.addLayerByKey("XRegion_Village_line");
-          this.addLayerByKey("XRegionVillageG_CenterPoint");
-          this.addLayerByKey("XRegionVillageG_CenterPoint_Symbol");
-          this.addLayerByKey("XRegion_TownGovernment_Symbol");
-
+case "Honeycomb":
+          this.addLayerByKey("Honeycomb");
+          this.addLayerByKey("Honeycomb_hightlight");
+    this.flyTo(12.5, 13,[120.740349690458, 31.2549510559793]);
           break;
-        case "XRegion_Village":
-          this.addLayerByKey(key);
-          this.addLayerByKey("XRegionVillageG_CenterPoint");
-          this.addLayerByKey("XRegionVillageG_CenterPoint_Symbol");
-          break;
-        default:
-          this.addLayerByKey(key);
-          break;
-
 case "heatmap_Heatmap":
           this.addLayerByKey("heatmap_Heatmap");
           this.addLayerByKey("heatmap_Circle");
-    
+    this.flyTo(12.5, 13,[120.990197,31.46735]);
+          break;
+
+case "clusters":
+          this.addLayerByKey("clusters");
+          this.addLayerByKey("cluster_count");
+    this.flyTo(12, 13,[120.990197,31.46735]);
           break;
 
       }
-      this.flyTo(12.5, 13);
+     
     },
-    clearLayer() {},
-    flyTo(zoom, from) {
+    clearLayer(){},
+    flyTo(zoom, from,centerdata) {
       this.map.setZoom(from || 11);
       this.map.setBearing(-10);
       this.map.flyTo({
-        center: this.mapInitOption.center,
+        center: centerdata,
         zoom: zoom,
         bearing: 0,
         pitch: 50,

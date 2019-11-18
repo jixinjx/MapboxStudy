@@ -1,3 +1,7 @@
+import Honeycombsrc from"../../../../../static/json/fengwo.json";
+
+
+
 export const layerConfig = {
     map: {
         version: 8,
@@ -9,47 +13,18 @@ export const layerConfig = {
                 type: "geojson",
                 data: "http://122.193.33.86:8050/geoserver/KS_ZHZS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=KS_ZHZS:VW_ZS_SQDJ_NullShape&maxFeatures=1000&outputFormat=application/json"
                 },
+                HoneycombShow:{
+                    "type": "geojson",
+                   "data": Honeycombsrc,
+                  },
+                  clusterShow:{
+                    type: "geojson",
+                    data: "http://122.193.33.86:8050/geoserver/KS_ZHZS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=KS_ZHZS:VW_ZS_SQDJ_NullShape&maxFeatures=1000&outputFormat=application/json",
+                    cluster: true,
+                    clusterMaxZoom: 16, // Max zoom to cluster points on
+                   clusterRadius: 80// 改变聚类的范围Radius of each cluster when clustering points (defaults to 50)   
+                },
 
-            // //X行政区划_Z镇界G
-            // XRegion_Town: {
-            //     type: "vector",
-            //     scheme: "tms",
-            //     tiles: [
-            //         webAPI.const.layerIP + "/geoserver/gwc/service/tms/1.0.0/CH_ZHDL:XRegion_Town@EPSG:900913@pbf/{z}/{x}/{y}.pbf"
-            //     ]
-            // },
-            // //X行政区划_C村界G
-            // XRegion_Village: {
-            //     type: "vector",
-            //     scheme: "tms",
-            //     tiles: [
-            //         webAPI.const.layerIP + "/geoserver/gwc/service/tms/1.0.0/CH_ZHDL:XRegion_Village@EPSG:900913@pbf/{z}/{x}/{y}.pbf"
-            //     ]
-            // },
-            // //行政区划_Z镇政府P
-            // XRegion_TownGovernment: {
-            //     type: "vector",
-            //     scheme: "tms",
-            //     tiles: [
-            //         webAPI.const.layerIP + "/geoserver/gwc/service/tms/1.0.0/CH_ZHDL:XRegion_TownGovernment@EPSG:900913@pbf/{z}/{x}/{y}.pbf"
-            //     ]
-            // },
-            // //X行政区划_C村界G_CenterPoint
-            // XRegionVillageG_CenterPoint: {
-            //     type: "vector",
-            //     scheme: "tms",
-            //     tiles: [
-            //         webAPI.const.layerIP + "/geoserver/gwc/service/tms/1.0.0/CH_ZHDL:XRegionVillageG_CenterPoint@EPSG:900913@pbf/{z}/{x}/{y}.pbf"
-            //     ]
-            // },
-            // //W网格管理_E二级网格G
-            // WGrid_SecondGrid: {
-            //     type: "vector",
-            //     scheme: "tms",
-            //     tiles: [
-            //         webAPI.const.layerIP + "/geoserver/gwc/service/tms/1.0.0/CH_ZHDL:WGrid_SecondGrid@EPSG:900913@pbf/{z}/{x}/{y}.pbf"
-            //     ]
-            // }
         },
         layers: []
     },
@@ -163,151 +138,109 @@ paint: {
 }
 },
 
-
-
-
-    /*X行政区划_Z镇界G */
-    XRegion_TownGovernment_Symbol: {
-        id: "XRegion_TownGovernment_Symbol",
-        source: "XRegion_TownGovernment",
-        "source-layer": "XRegion_TownGovernment",
-        type: "symbol",
-        layout: {
-            "icon-image": "icon-zf",
-            "icon-size": 0.2,
-            "text-font": [
-                "Roboto Regular",
-                "Arial Unicode MS Regular"
-            ],
-            "text-anchor": "bottom",
-            "symbol-placement": "point",
-            "text-field": "{MC}",
-            "text-offset": [-2, 2.1],
-            "text-size": 20
-        },
-        paint: {
-            "text-color": "hsl(0, 0%, 90%)",
-            "text-halo-color": "hsla(0, 0%, 10%, 0.75)",
-            "text-halo-width": 3
-        }
-    },
-    /** X行政区划_Z镇界G 金湖戴楼--镇界*/
-    XRegion_Town: {
-        id: "XRegion_Town",
-        source: "XRegion_Town",
-        "source-layer": "XRegion_Town",
-        type: "fill",
-        maxzoom: 13,
-
-        layout: {},
-        paint: {
-            "fill-color": "rgba(0,153,153,0.3)",
-            'fill-opacity': 0.6
-        }
-    },
-    XRegion_Town_line: {
-        id: "XRegion_Town_line",
-        source: "XRegion_Town",
-        "source-layer": "XRegion_Town",
-        type: "line",
-        maxzoom: 13,
-        layout: {
-            "line-join": "round",
-            /* 线条相交处的样式 */
-            "line-cap": "round" /* 线条末端的样式 */
-        },
-        paint: {
-            "line-color": "rgba(0,153,153,0.3)",
-            'line-opacity': 1,
-            "line-width": 8,
-        }
-    },
-    /*X行政区划_C村界G*/
-    XRegion_Village_line: {
-        id: "XRegion_Village_line",
-        source: "XRegion_Village",
-        "source-layer": "XRegion_Village",
-        //minzoom: 13,
-        type: "line",
-        layout: {
-            "line-join": "round",
-            /* 线条相交处的样式 */
-            "line-cap": "round" /* 线条末端的样式 */
-        },
-        paint: {
-            "line-color": "rgba(0,153,153,0.3)",
-            "line-width": 2
-        }
-    },
-    /**3D建筑 */
-    XRegion_Village: {
-        id: "XRegion_Village",
-        source: "XRegion_Village",
-        "source-layer": "XRegion_Village",
-        type: "fill-extrusion",
-        layout: {},
-        paint: {
-            'fill-extrusion-color': [
-                "match", ["get", "MC"],
-                "红岭村",
-                "#091220",
-                "小集村",
-                "rgb(253,251,194)",
-                "新河水库",
-                "rgb(255,214,154)",
-                "官塘村",
-                "rgb(252,170,120)",
-                "新塘村",
-                "rgb(244,136,100)",
-                "牌楼村",
-                "rgb(239,95,105)",
-                "楼庄村",
-                "rgb(216,64,111)",
-                "永丰社区",
-                "rgb(174,58,119)",
-                "戴楼村",
-                "rgb(141,40,134)",
-                "衡阳村",
-                "rgb(107,30,126)",
-                "rgb(32,19,72)"
-            ],
-            'fill-extrusion-height': 1000,
-            'fill-extrusion-base': 0,
-            'fill-extrusion-opacity': 0.9
-        }
-    },
-    /** X行政区划_C村界G_CenterPoint */
-    /**symbol */
-    XRegionVillageG_CenterPoint_Symbol: {
-        id: "XRegionVillageG_CenterPoint_Symbol",
-        source: "XRegionVillageG_CenterPoint",
-        "source-layer": "XRegionVillageG_CenterPoint",
-        type: "symbol",
-        layout: {
-            "text-field": "{MC}",
-            "text-offset": [0, -1.5],
-            "text-max-width": 10,
-            "text-size": 20
-        },
-        paint: {
-            "text-color": "hsl(0, 0%, 90%)",
-            "text-halo-color": "hsla(0, 0%, 10%, 0.75)",
-            "text-halo-width": 5
-        }
-    },
-    /** X行政区划_C村界G_CenterPoint */
-    /**symbol */
-    XRegionVillageG_CenterPoint: {
-        id: "XRegionVillageG_CenterPoint",
-        source: "XRegionVillageG_CenterPoint",
-        "source-layer": "XRegionVillageG_CenterPoint",
-        type: "circle",
-        layout: {},
-        paint: {
-            "circle-color": "hsla(0, 0%, 10%, 0.75)",
-            "circle-radius": 4,
-            "circle-stroke-width": 1,
-            "circle-stroke-color": "#fff"
-        }
+Honeycomb:{
+    'id': 'Honeycomb',
+    'type': 'fill-extrusion',
+    'source': 'HoneycombShow',
+    'paint': {
+    // See the Mapbox Style Specification for details on data expressions.
+    // https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions
+     
+    // Get the fill-extrusion-color from the source 'color' property.
+    'fill-extrusion-color':[
+        'interpolate', ['linear'],
+        ['to-number', ['get', 'cnt']],
+        1,
+        '#147131',
+        2,
+        'rgb(26, 150, 65)',
+        3,
+        'rgb(106, 188, 88)',
+        4,
+        'rgb(179, 222, 118)',
+        6,
+        'rgb(230, 244, 167)',
+        9,
+        'rgb(254, 232, 165)',
+        14,
+        'rgb(253, 186, 111)',
+        16,
+        'rgb(237, 110, 67)',
+        18,
+        'rgb(215, 25, 28)'
+    ],
+     
+    // Get fill-extrusion-height from the source 'height' property.
+    'fill-extrusion-height': ['*', ['to-number', ['get', 'cnt']], 15],
+     
+    // Get fill-extrusion-base from the source 'base_height' property.
+    
+     
+    // Make extrusions slightly opaque for see through indoor walls.
+    'fill-extrusion-opacity': 0.5
     }
+    },
+    
+    Honeycomb_hightlight:{
+        'id': 'Honeycomb_hightlight',
+        'type': 'fill',
+      'source': 'HoneycombShow',
+        'type': 'fill-extrusion',
+        'layout': {},
+       'minZoom': 10,
+        'paint': {
+          'fill-extrusion-color': '#FF0000',
+          // use an 'interpolate' expression to add a smooth transition effect to the
+          // buildings as the user zooms in
+          'fill-extrusion-height': ['*', ['to-number', ['get', 'cnt']], 15],
+        
+          'fill-extrusion-opacity': 1
+        },
+        "filter": ["in", "hexcode", ""]
+      },
+
+      clusters:{
+        "id": "clusters",
+        "type": "circle",
+        "source": "clusterShow",
+        filter: ["has", "point_count"],
+        "maxzoom": 16,
+        "paint": {// Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+        // with three steps to implement three types of circles:
+        //   * Blue, 20px circles when point count is less than 100
+        //   * Yellow, 30px circles when point count is between 100 and 750
+        //   * Pink, 40px circles when point count is greater than or equal to 750
+        "circle-color": [
+        "step",
+        ["get", "point_count"],
+        "#51bbd6",
+        12,
+        "#f1f075",
+        20,
+        "#f28cb1"
+        ],
+        "circle-radius": [
+        "step",
+        ["get", "point_count"],
+        20,
+        15,//第一级个
+        30,
+        40,//第二级个
+        40
+        ]
+        }
+        }, 
+        
+        cluster_count:{
+            id: "cluster_count",
+            type: "symbol",
+            source: "clusterShow",
+            filter: ["has", "point_count"],
+            layout: {
+            "text-field": "{point_count_abbreviated}",
+            "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+            "text-size": 35
+            }
+            },
+
 }

@@ -1,5 +1,5 @@
 <template>
-  <div style="height:100%;width:100%;text-align:left;">
+  <div class="myMap">
     <div id="mapboxC"></div>
     <layer
       ref="layers"
@@ -26,7 +26,7 @@ export default {
       map: null,
       activeLayerList: [],
       mapInitOption: {
-        center: [120.990197,31.46735], //POINT (118.95703098200011 33.013849272000073)
+        center: [118.88703098200011, 32.98849272000073], //POINT (118.95703098200011 33.013849272000073)
         pitch: 50,
         bearing: 0,
         zoom: 12.5

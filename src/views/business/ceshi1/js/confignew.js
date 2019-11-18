@@ -10,7 +10,7 @@ export const layerConfig = {
                 data: "http://122.193.33.86:8050/geoserver/KS_ZHZS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=KS_ZHZS:VW_ZS_SQDJ_NullShape&maxFeatures=1000&outputFormat=application/json"
                 },
 
-            // //X行政区划_Z镇界G
+            //X行政区划_Z镇界G
             // XRegion_Town: {
             //     type: "vector",
             //     scheme: "tms",
