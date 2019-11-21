@@ -65,10 +65,10 @@ export default {
   methods: {
     initMap() {
       mapboxgl.accessToken =
-        "pk.eyJ1Ijoid2FuZ3NlbjEyMyIsImEiOiJjanJ6bTliaDMxYTgzNDVvZG44N2N5M2c2In0.ab5OgYWksZbKLzTl2BxZKg";
+        "pk.eyJ1Ijoiaml4aW5qeCIsImEiOiJjazJiaTk4bjQ0amw3M2ltdHNlNDY0cGRhIn0.HoLIuAtwOgzJj5ax3NG4hQ";
       this.map = new mapboxgl.Map({
         container: "mapboxC", // container id
-        style: "mapbox://styles/wangsen123/ck273vrot0lak1cqt2sbp5mrf", //"mapbox://styles/wangsen123/ck273vrot0lak1cqt2sbp5mrf", //layerConfig.map,
+        style: "mapbox://styles/mapbox/dark-v10", //"mapbox://styles/wangsen123/ck273vrot0lak1cqt2sbp5mrf", //layerConfig.map,
         center: this.mapInitOption.center,
         minZoom: 5,
         maxZoom: 15.5,
