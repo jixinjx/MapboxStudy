@@ -24,7 +24,7 @@ export default {
         center: [120.740349690458, 31.2549510559793], //POINT (118.95703098200011 33.013849272000073)
         pitch: 50,
         bearing: 0,
-        zoom: 12.5
+        zoom: 13
       },
       isShowLayerControls: true,
       
@@ -47,7 +47,7 @@ export default {
   },
   methods: {
 
-    
+
     initMap() {
       mapboxgl.accessToken =
         "pk.eyJ1Ijoiaml4aW5qeCIsImEiOiJjazJiaTk4bjQ0amw3M2ltdHNlNDY0cGRhIn0.HoLIuAtwOgzJj5ax3NG4hQ";
@@ -64,10 +64,11 @@ export default {
 
       const _this = this;
       this.map.on('load',function(){
-       
+      
         var featuresdata=_this.data.features;
       //for循环给对象写入color属性，通过cnt赋予不同的color属性，由于cnt属性值太小，所以乘以一个系数
         for(var i=0;i<featuresdata.length;i++){
+          // _this.$set(featuresdata[i].properties,'id',featuresdata[i].properties.hexcode)
           if(Number(featuresdata[i].properties.cnt)<2)
           {_this.$set(featuresdata[i].properties,'color','#00FFFF');}
           else if(Number(featuresdata[i].properties.cnt)<10)
@@ -84,13 +85,41 @@ export default {
         //     _this.$set(featuresdata[i].properties,'color','#FF0000');
         // };
             featuresdata[i].properties.cnt=featuresdata[i].properties.cnt*60;
+            
         }
+
           _this.map.addSource('heatsrc',{
           "type": "geojson",
          "data": geojson,
          
         });
        console.log(_this.data.features,"2222");
+       
+var AnimateIdx = 0
+var sel =  setInterval(()=>{
+   AnimateIdx++;
+   var times=30;
+  if(AnimateIdx < times){
+        console.log(AnimateIdx,"AnimateIdx")
+        _this.map.querySourceFeatures('heatsrc').forEach((fea)=>{//取出元素
+            let delta;
+           
+            delta = (AnimateIdx/times)
+            // let current=Math.sqrt(Number(delta* AnimateIdx))
+
+             _this.map.setPaintProperty('room-extrusion', 'fill-extrusion-height', ['*', ['to-number', ['get', 'cnt']], delta],);
+            //  _this.map.setFeatureState({ id: current, source: 'heatsrc',}, { current_cnt:current })
+            // console.log(fea.properties)
+          
+        })
+            // let animation = requestAnimationFrame(animateLine);  
+        }else{clearInterval(sel);
+				sel = null}
+            }, 0.001);
+        
+
+      
+
 
 
 
@@ -106,7 +135,8 @@ export default {
 'fill-extrusion-color': ['get','color'],
  
 // Get fill-extrusion-height from the source 'height' property.
-'fill-extrusion-height': ['get', 'cnt'],
+'fill-extrusion-height':0,
+// ['to-number', ['get', 'id']],
  
 // Get fill-extrusion-base from the source 'base_height' property.
 
