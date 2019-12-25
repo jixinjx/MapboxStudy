@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import * as THREE from 'three';
+import * as threebox from" ../../../static/threebox.js"
 import mapboxgl from "mapbox-gl";
 import geojson from"../../../../static/json/fengwo.json";
 // import { layerConfig } from "./js/confignew.js";
@@ -21,10 +23,12 @@ export default {
       map: null,
       activeLayerList: [],
       mapInitOption: {
+        // 148.98190, -35.39847
+        // 120.740349690458, 31.2549510559793
         center: [120.740349690458, 31.2549510559793], //POINT (118.95703098200011 33.013849272000073)
         pitch: 50,
         bearing: 0,
-        zoom: 13
+        zoom: 12.5
       },
       isShowLayerControls: true,
       
@@ -44,6 +48,7 @@ export default {
     this.initMap();
     const _this = this;
    
+
   },
   methods: {
 
@@ -117,8 +122,32 @@ var sel =  setInterval(()=>{
 				sel = null}
             }, 0.001);
         
+	if(!config) console.error("Config not set! Make a copy of 'config_template.js', add in your access token, and save the file as 'config.js'.");
+      var origin = [120.740349690458, 31.2549510559793];
+ _this.map.on('style.load', function() {
+		 _this.map.addLayer({
+				id: 'custom_layer',
+				type: 'custom',
+				onAdd: function(map, mbxContext){
+					tb = new Threebox(
+						_this.map, 
+						mbxContext,
+						{defaultLights: true}
+					);
+					//instantiate a red sphere and position it at the origin lnglat
+					var sphere = tb.sphere({color: 'red', material: 'MeshStandardMaterial'})
+						.setCoords(origin);
+					// add sphere to the scene
+					tb.add(sphere);
+				},
+				
+				render: function(gl, matrix){
+					tb.update();
+				}
+			})
+    }
+);
 
-      
 
 
 

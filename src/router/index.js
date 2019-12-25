@@ -20,6 +20,10 @@ export default new Router({
     path: '/ceshi1',
     name: 'ceshi1',
     component: resolve => require(['@/views/business/ceshi1/index'], resolve),
+},{
+  path: '/gltest',
+  name: 'gltest',
+  component: resolve => require(['@/views/business/gltest/index'], resolve),
 },
   {
   path: '/mapmain',
