@@ -15,7 +15,7 @@
     "countup.js": "^2.0.4",
     "mapbox-gl": "^1.5.0",
     "style-loader": "^1.1.1",
-    "three": "^0.111.0",
+    "three": "^0.137.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
